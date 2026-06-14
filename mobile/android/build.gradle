@@ -1,0 +1,41 @@
+buildscript {
+    ext {
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 35
+        targetSdkVersion = 34
+        ndkVersion = "26.1.10909125"
+        kotlinVersion = "1.9.24"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
+
+// AGP 8 requires every Android module to declare a namespace. Some older native
+// libraries (e.g. react-native-razorpay) only set `package` in their manifest;
+// inject the namespace from that package for any module missing one. Using
+// plugins.withId configures the android extension at the right time (no
+// afterEvaluate timing issues).
+subprojects { subproject ->
+    subproject.plugins.withId("com.android.library") {
+        def androidExt = subproject.extensions.findByName("android")
+        if (androidExt != null && androidExt.namespace == null) {
+            def manifestFile = file("${subproject.projectDir}/src/main/AndroidManifest.xml")
+            if (manifestFile.exists()) {
+                def pkg = new groovy.util.XmlSlurper().parse(manifestFile).@package.text()
+                if (pkg) {
+                    androidExt.namespace = pkg
+                }
+            }
+        }
+    }
+}

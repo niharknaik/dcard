@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# testing
+coverage/
+
+# native build artifacts
+android/app/build/
+ios/build/
+ios/Pods/
+
+# metro / haste
+.metro-health-check*
+*.log
+
+# env
+.env
+
+# misc
+.DS_Store
+*.pem

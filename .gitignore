@@ -1,0 +1,35 @@
+# ---- Dependencies / build (reinforced across the monorepo) ----
+**/node_modules/
+**/vendor/
+web/.next/
+web/.swc/
+web/out/
+**/build/
+**/*.tsbuildinfo
+
+# ---- Environment & secrets ----
+**/.env
+**/.env.local
+**/.env.*.local
+
+# ---- Backend: dev database, storage, keys ----
+backend/database/*.sqlite
+backend/storage/app/public/*
+backend/public/storage
+backend/storage/*.key
+
+# ---- React Native native build artifacts ----
+**/.cxx/
+**/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/android/.kotlin/
+mobile/ios/Pods/
+mobile/ios/build/
+mobile/ios/*.xcworkspace/xcuserdata/
+mobile/.bundle/
+
+# ---- Editor / OS / local tooling ----
+.DS_Store
+*.log
+.claude/settings.local.json
