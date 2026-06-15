@@ -1,10 +1,11 @@
-<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DCard">
+<svg width="512" height="512" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DCard">
   <defs>
-    <linearGradient id="dcardHdr" x1="6" y1="6" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+    <linearGradient id="dcardStore" x1="6" y1="4" x2="90" y2="92" gradientUnits="userSpaceOnUse">
       <stop stop-color="#818CF8"/><stop offset="0.55" stop-color="#6366F1"/><stop offset="1" stop-color="#4F46E5"/>
     </linearGradient>
   </defs>
-  <rect x="0" y="0" width="96" height="96" rx="24" fill="url(#dcardHdr)"/>
+  <!-- full-bleed background (Play applies its own corner mask) -->
+  <rect x="0" y="0" width="96" height="96" fill="url(#dcardStore)"/>
   <g transform="translate(48 48) scale(1.18) translate(-48 -48)">
     <path fill-rule="evenodd" clip-rule="evenodd"
           d="M24 32 H42 A16 16 0 0 1 42 64 H24 Z M31 39 H42 A9 9 0 0 1 42 57 H31 Z" fill="#ffffff"/>
