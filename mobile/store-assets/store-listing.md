@@ -77,3 +77,36 @@ Support & grievances: info@copg.in
 - Contact email: info@copg.in
 - Do NOT use emojis-as-keywords, "#1/best" claims, or testimonials (policy).
 - Keep claims matching real functionality (analytics, leads, QR, templates all exist).
+
+---
+
+## Phone screenshots — storyboard & captions
+
+Play allows 2–8 phone screenshots. Recommended: the 7 below (drop #6/#7 if you want a tighter set; the first 3 matter most — they show in the carousel preview).
+
+**Spec:** PNG or JPEG, 9:16 portrait, 1080 × 1920 px (min 1080 on the short side), RGB, < 8 MB each.
+
+**Design system for the caption overlays (keep consistent across all shots):**
+- Indigo brand background or the screenshot on a soft indigo gradient with a device frame.
+- Headline in Sora Bold, white, top ~25% of the image (above the device); short subline below in lighter weight.
+- Keep text in the top third; never cover the key UI. Use the same colors as the app (#6366F1 / #4F46E5).
+
+| # | Screen to capture | Caption headline | Subline |
+|---|---|---|---|
+| 1 | A finished public card (`/c/[slug]` view) — photo, name, role, buttons | **Your digital visiting card** | Make a memorable first impression. |
+| 2 | Card editor / create flow | **Build your card in minutes** | Add your photo, role, contact and bio. |
+| 3 | QR share screen | **Share with a tap or QR** | No app needed for the people you meet. |
+| 4 | Lead capture form / Leads inbox | **Never miss a lead** | Visitors leave their details instantly. |
+| 5 | Card analytics screen | **See who's viewing** | Track card views and lead activity. |
+| 6 | Templates marketplace | **Stand out with great templates** | Free and premium designs. |
+| 7 | Rewards / Referrals screen | **Earn rewards, invite friends** | Grow with referral points. |
+
+**Caption copy rules:** headlines ≤ ~28 characters so they stay legible as thumbnails; sublines ≤ ~45 characters. Match the wording to what's actually on screen. No prices in screenshots (they change); no "#1/best" claims.
+
+**Capture tips:**
+- Use a clean demo account with realistic (non-placeholder) content — a real-looking name, a sharp avatar, 2–3 portfolio items.
+- Hide the status bar clutter or use a clean device; consistent device frame across all 7.
+- Shoot at 1080 × 1920 from a high-res device or emulator (Pixel 6/7).
+- Order matters: #1–#3 carry the carousel — lead with value (card → create → share).
+
+**Optional:** a 7" / 10" tablet set (same captions) improves visibility on tablets; not required for phone-only release.
