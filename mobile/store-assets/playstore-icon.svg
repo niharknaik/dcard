@@ -6,12 +6,15 @@
   </defs>
   <!-- full-bleed background (Play applies its own corner mask) -->
   <rect x="0" y="0" width="96" height="96" fill="url(#dcardStore)"/>
-  <g transform="translate(48 48) scale(1.18) translate(-48 -48)">
+  <g transform="translate(48 48) scale(1.2) translate(-48 -48)">
     <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M24 32 H42 A16 16 0 0 1 42 64 H24 Z M31 39 H42 A9 9 0 0 1 42 57 H31 Z" fill="#ffffff"/>
-    <g fill="none" stroke="#ffffff" stroke-linecap="round">
-      <path d="M58 40 A10 10 0 0 1 58 56" stroke-width="3.4"/>
-      <path d="M64 34 A17 17 0 0 1 64 62" stroke-width="3.4" opacity="0.5"/>
+          d="M26 26 H48 A22 22 0 0 1 48 70 H26 Z M35 35 H48 A13 13 0 0 1 48 61 H35 Z" fill="#ffffff"/>
+    <g fill="#ffffff">
+      <rect x="37.5" y="40" width="4.8" height="4.8" rx="1.4"/>
+      <rect x="45" y="40" width="4.8" height="4.8" rx="1.4"/>
+      <rect x="37.5" y="47.5" width="4.8" height="4.8" rx="1.4"/>
+      <rect x="45" y="47.5" width="4.8" height="4.8" rx="1.4"/>
+      <rect x="52.5" y="43.75" width="4.8" height="4.8" rx="1.4"/>
     </g>
   </g>
 </svg>
