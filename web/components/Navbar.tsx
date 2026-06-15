@@ -23,10 +23,9 @@ export function Navbar() {
             ? 'border-white/60 bg-white/75 shadow-soft backdrop-blur-xl'
             : 'border-transparent bg-transparent'
         }`}>
-        <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-gradient text-base font-bold text-white shadow-glow">
-            D
-          </span>
+        <a href="#top" className="flex items-center gap-2.5" aria-label={site.name}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/mark.svg" alt="" width={36} height={36} className="h-9 w-9 shadow-glow rounded-xl" />
           <span className="font-display text-lg font-bold text-ink">{site.name}</span>
         </a>
 

@@ -27,10 +27,9 @@ export function Sidebar() {
 
   return (
     <aside className="flex shrink-0 flex-row gap-1 border-b border-line bg-white/80 p-3 backdrop-blur md:sticky md:top-0 md:h-screen md:w-60 md:flex-col md:gap-2 md:border-b-0 md:border-r md:p-4">
-      <a href="/dashboard" className="mb-0 flex items-center gap-2.5 px-2 md:mb-6 md:py-2">
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-gradient text-base font-bold text-white shadow-glow">
-          D
-        </span>
+      <a href="/dashboard" className="mb-0 flex items-center gap-2.5 px-2 md:mb-6 md:py-2" aria-label="DCard">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/mark.svg" alt="" width={36} height={36} className="h-9 w-9 shadow-glow rounded-xl" />
         <span className="hidden font-display text-lg font-bold text-ink md:inline">DCard</span>
       </a>
 
