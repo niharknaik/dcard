@@ -110,3 +110,6 @@ Play allows 2–8 phone screenshots. Recommended: the 7 below (drop #6/#7 if you
 - Order matters: #1–#3 carry the carousel — lead with value (card → create → share).
 
 **Optional:** a 7" / 10" tablet set (same captions) improves visibility on tablets; not required for phone-only release.
+
+### Ready-made caption templates
+Pre-built 1080×1920 overlay templates (brand gradient + outlined caption + device frame with a "drop screenshot here" slot) are in `screenshots/template-1.png` … `template-7.png` (editable SVG sources alongside). To use: open each template, place your captured app screen inside the device slot (the light area is 9:16, matching a 1080×1920 screenshot), flatten, and upload. Templates are numbered to match the storyboard rows above.
