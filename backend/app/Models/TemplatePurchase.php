@@ -11,7 +11,7 @@ class TemplatePurchase extends Model
 {
     protected $fillable = [
         'user_id', 'template_id', 'unlock_method', 'amount', 'currency',
-        'points_spent', 'status', 'transaction_id',
+        'points_spent', 'status', 'gateway', 'transaction_id',
         'razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature', 'paid_at',
     ];
 

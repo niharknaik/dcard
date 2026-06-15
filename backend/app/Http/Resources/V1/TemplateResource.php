@@ -29,6 +29,7 @@ class TemplateResource extends JsonResource
             'currency'       => $this->currency,
             'price_points'   => (int) $this->price_points,
             'is_free'        => (bool) $this->is_free,
+            'play_product_id' => $this->play_product_id,
             'has_portfolio'  => (bool) $this->has_portfolio,
             'has_contact'    => (bool) $this->has_contact,
             'has_social'     => (bool) $this->has_social,

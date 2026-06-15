@@ -2,7 +2,7 @@
   "name": "DCard",
   "displayName": "DCard",
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-3940256099942544~3347511713",
-    "ios_app_id": "ca-app-pub-3940256099942544~1458002511"
+    "android_app_id": "REPLACE_WITH_REAL_ADMOB_APP_ID",
+    "ios_app_id": "REPLACE_WITH_REAL_ADMOB_APP_ID"
   }
 }

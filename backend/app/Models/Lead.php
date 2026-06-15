@@ -13,12 +13,15 @@ class Lead extends Model
 
     protected $fillable = [
         'card_id', 'name', 'email', 'phone', 'message',
-        'source', 'ip_address', 'is_read',
+        'source', 'ip_address', 'is_read', 'consent_accepted_at',
     ];
 
     protected function casts(): array
     {
-        return ['is_read' => 'boolean'];
+        return [
+            'is_read' => 'boolean',
+            'consent_accepted_at' => 'datetime',
+        ];
     }
 
     public function card(): BelongsTo

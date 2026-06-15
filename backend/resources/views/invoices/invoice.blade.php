@@ -35,8 +35,10 @@
     </div>
 
     <h2>Billed to</h2>
-    <div>{{ $payment->user?->name }}</div>
-    <div class="muted">{{ $payment->user?->email }}</div>
+    {{-- Prefer the snapshot captured before account anonymization so retained
+         tax invoices stay accurate after a user exercises right-to-erasure. --}}
+    <div>{{ $payment->meta['billing_name'] ?? $payment->user?->name }}</div>
+    <div class="muted">{{ $payment->meta['billing_email'] ?? $payment->user?->email }}</div>
 
     <table>
         <thead>

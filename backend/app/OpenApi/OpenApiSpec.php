@@ -12,7 +12,7 @@ namespace App\OpenApi;
  *     title="DCard API",
  *     version="1.0.0",
  *     description="Digital Visiting Card SaaS — REST API (JWT auth).",
- *     @OA\Contact(email="support@dcard.app")
+ *     @OA\Contact(email="info@copg.in")
  * )
  *
  * @OA\Server(url="http://localhost:8000", description="Local")

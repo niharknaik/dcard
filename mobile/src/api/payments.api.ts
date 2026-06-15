@@ -7,6 +7,11 @@ export interface VerifyPayload {
   razorpay_signature: string;
 }
 
+export interface VerifyPlayPayload {
+  purchase_token: string;
+  product_id: string;
+}
+
 export const paymentsApi = {
   async checkout(planId: number): Promise<CheckoutOrder> {
     const {data} = await api.post<ApiEnvelope<CheckoutOrder>>('/subscriptions/checkout', {plan_id: planId});
@@ -15,6 +20,11 @@ export const paymentsApi = {
 
   async verify(payload: VerifyPayload): Promise<Payment> {
     const {data} = await api.post<ApiEnvelope<Payment>>('/payments/verify', payload);
+    return data.data;
+  },
+
+  async verifyPlay(payload: VerifyPlayPayload): Promise<Payment> {
+    const {data} = await api.post<ApiEnvelope<Payment>>('/payments/play/verify', payload);
     return data.data;
   },
 

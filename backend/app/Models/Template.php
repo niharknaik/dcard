@@ -20,7 +20,7 @@ class Template extends Model
         'template_category_id', 'name', 'slug', 'description',
         'thumbnail', 'preview_images',
         'layout', 'color_scheme', 'font_family', 'config',
-        'price', 'currency', 'price_points', 'is_free',
+        'price', 'currency', 'price_points', 'is_free', 'play_product_id',
         'has_portfolio', 'has_contact', 'has_social',
         'is_active', 'sort_order', 'purchases_count', 'usage_count',
     ];

@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, HelperText, Text, TextInput} from 'react-native-paper';
+import {Button, Checkbox, HelperText, Text, TextInput} from 'react-native-paper';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ScreenContainer} from '@/components/ui/ScreenContainer';
 import {AuthStackParamList} from '@/navigation/types';
 import {useAuthStore} from '@/store/auth.store';
 import {apiErrorMessage} from '@/api/client';
+import {contentApi} from '@/api/content.api';
 import {colors, spacing} from '@/theme';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
@@ -15,6 +16,21 @@ export function RegisterScreen({navigation}: Props) {
   const [form, setForm] = useState({name: '', email: '', phone: '', password: '', confirm: '', referralCode: ''});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [agreement, setAgreement] = useState(
+    'I agree that DCard stores my information to create and maintain my digital card, and will not use it for any other purpose without my permission.',
+  );
+
+  useEffect(() => {
+    contentApi
+      .consent()
+      .then(t => {
+        if (t) {
+          setAgreement(t);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const set = (key: keyof typeof form) => (value: string) => setForm(prev => ({...prev, [key]: value}));
 
@@ -33,6 +49,7 @@ export function RegisterScreen({navigation}: Props) {
         password: form.password,
         password_confirmation: form.confirm,
         referral_code: form.referralCode.trim() || undefined,
+        accept_terms: true,
       });
     } catch (e) {
       setError(apiErrorMessage(e));
@@ -69,9 +86,18 @@ export function RegisterScreen({navigation}: Props) {
         style={styles.input}
       />
 
+      <Checkbox.Item
+        status={consent ? 'checked' : 'unchecked'}
+        onPress={() => setConsent(prev => !prev)}
+        position="leading"
+        labelVariant="bodySmall"
+        style={styles.consent}
+        label={agreement}
+      />
+
       {error ? <HelperText type="error">{error}</HelperText> : null}
 
-      <Button mode="contained" onPress={onSubmit} loading={loading} disabled={loading} style={styles.button}>
+      <Button mode="contained" onPress={onSubmit} loading={loading} disabled={loading || !consent} style={styles.button}>
         Sign Up
       </Button>
 
@@ -88,6 +114,7 @@ export function RegisterScreen({navigation}: Props) {
 const styles = StyleSheet.create({
   title: {marginBottom: spacing.md, color: colors.text},
   input: {marginBottom: spacing.sm},
+  consent: {paddingHorizontal: 0, marginTop: spacing.xs},
   button: {marginTop: spacing.sm},
   footer: {flexDirection: 'row', justifyContent: 'center', marginTop: spacing.lg},
   link: {color: colors.primary, fontWeight: '600'},

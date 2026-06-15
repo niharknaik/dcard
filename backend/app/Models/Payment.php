@@ -12,7 +12,7 @@ class Payment extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'subscription_id', 'subscription_plan_id',
+        'user_id', 'subscription_id', 'subscription_plan_id', 'gateway',
         'transaction_id', 'razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature',
         'amount', 'currency', 'status', 'method', 'invoice_number',
         'meta', 'paid_at', 'refunded_at',

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {site} from '@/lib/site';
+import type {HeroContent} from '@/lib/landing';
 import {ButtonLink} from './ui/Button';
 import {Icon} from './icons';
 import {CardMockup} from './CardMockup';
 
-export function Hero() {
+export function Hero({hero}: {hero: HeroContent}) {
   return (
     <section id="top" className="relative overflow-hidden pt-10">
       {/* Aurora mesh + grid backdrop */}
@@ -20,18 +20,18 @@ export function Hero() {
         <div className="animate-fade-up">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-ink-soft shadow-soft backdrop-blur">
             <Icon name="bolt" width={14} height={14} className="text-violet-500" />
-            No paper · No friction · No third-party trackers
+            {hero.badge}
           </span>
 
           <h1 className="mt-6 text-[2.75rem] font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-            Your digital visiting card, <span className="text-gradient">everywhere</span>.
+            {hero.title} <span className="text-gradient">{hero.highlight}</span>.
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">{site.description}</p>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">{hero.description}</p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <ButtonLink href="#download" className="px-6 py-3.5 text-base">
-              Get the app
+              {hero.primary_cta}
               <Icon
                 name="arrowRight"
                 width={18}
@@ -41,7 +41,7 @@ export function Hero() {
             </ButtonLink>
             <ButtonLink href="#how" variant="secondary" className="px-6 py-3.5 text-base">
               <Icon name="playCircle" width={18} height={18} className="text-primary" />
-              See how it works
+              {hero.secondary_cta}
             </ButtonLink>
           </div>
 
@@ -63,9 +63,9 @@ export function Hero() {
                 {Array.from({length: 5}).map((_, i) => (
                   <Icon key={i} name="star" width={15} height={15} />
                 ))}
-                <span className="ml-1.5 text-sm font-semibold text-ink">4.8</span>
+                <span className="ml-1.5 text-sm font-semibold text-ink">{hero.rating}</span>
               </div>
-              <p className="text-sm text-ink-muted">Loved by 10,000+ professionals</p>
+              <p className="text-sm text-ink-muted">{hero.rating_caption}</p>
             </div>
           </div>
         </div>

@@ -1,8 +1,9 @@
 import * as React from 'react';
+import type {CtaContent} from '@/lib/landing';
 import {ButtonLink} from './ui/Button';
 import {Icon} from './icons';
 
-export function CtaBand() {
+export function CtaBand({cta}: {cta: CtaContent}) {
   return (
     <section id="download" className="container-px py-20">
       <div className="relative overflow-hidden rounded-[2rem] bg-ink px-6 py-16 text-center text-white shadow-float sm:px-12 sm:py-20">
@@ -22,16 +23,11 @@ export function CtaBand() {
 
         <span className="relative inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold backdrop-blur">
           <Icon name="sparkle" width={13} height={13} className="text-fuchsia-400" />
-          Free forever — no credit card needed
+          {cta.badge}
         </span>
 
-        <h2 className="relative mt-6 text-3xl font-bold sm:text-5xl">
-          Ready to go <span className="text-gradient">digital</span>?
-        </h2>
-        <p className="relative mx-auto mt-4 max-w-xl text-white/75">
-          Create your card in minutes and start sharing today. Join 10,000+ professionals who
-          never run out of business cards again.
-        </p>
+        <h2 className="relative mt-6 text-3xl font-bold sm:text-5xl">{cta.title}</h2>
+        <p className="relative mx-auto mt-4 max-w-xl text-white/75">{cta.description}</p>
 
         <div className="relative mt-9 flex flex-wrap items-center justify-center gap-3">
           <ButtonLink

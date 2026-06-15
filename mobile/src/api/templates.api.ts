@@ -55,6 +55,16 @@ export const templatesApi = {
     return data.data;
   },
 
+  async verifyPlay(payload: {
+    purchase_token: string;
+    product_id: string;
+    template_id: number;
+    method?: TemplateUnlockMethod;
+  }): Promise<TemplatePurchase> {
+    const {data} = await api.post<ApiEnvelope<TemplatePurchase>>('/templates/play/verify', payload);
+    return data.data;
+  },
+
   async apply(templateId: number, cardId: number, color?: string): Promise<Card> {
     const {data} = await api.post<ApiEnvelope<Card>>(
       `/templates/${templateId}/apply`,

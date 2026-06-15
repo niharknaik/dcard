@@ -41,6 +41,7 @@ class AuthService
                 'email' => $data['email'],
                 'phone' => $data['phone'] ?? null,
                 'password' => $data['password'], // hashed via model cast
+                'consent_accepted_at' => now(),
             ]);
 
             $user->assignRole('user');

@@ -64,6 +64,7 @@ describe('auth store', () => {
       email: 'jane@example.com',
       password: 'secret',
       password_confirmation: 'secret',
+      accept_terms: true,
     });
 
     expect(storage.set).toHaveBeenCalledWith('jwt-token');

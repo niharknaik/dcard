@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {faqs} from '@/lib/site';
+import type {FaqItem} from '@/lib/landing';
 import {SectionHeading} from './ui/SectionHeading';
 
-export function Faq() {
+export function Faq({faqs}: {faqs: FaqItem[]}) {
   return (
     <section id="faq" className="bg-white">
       <div className="container-px py-20 sm:py-28">

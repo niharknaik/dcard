@@ -1,5 +1,6 @@
 import type {Metadata, Viewport} from 'next';
 import './globals.css';
+import {CookieConsent} from '@/components/CookieConsent';
 
 export const metadata: Metadata = {
   title: 'DCard — Your digital visiting card, everywhere',
@@ -29,7 +30,10 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <CookieConsent />
+      </body>
     </html>
   );
 }

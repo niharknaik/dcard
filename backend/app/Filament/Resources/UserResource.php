@@ -65,6 +65,7 @@ class UserResource extends Resource
                 IconColumn::make('is_admin')->boolean()->label('Admin'),
                 TextColumn::make('roles.label')->badge()->label('Roles')->toggleable(),
                 TextColumn::make('cards_count')->counts('cards')->label('Cards'),
+                TextColumn::make('consent_accepted_at')->label('Consent given')->dateTime()->sortable()->toggleable(),
                 TextColumn::make('created_at')->dateTime()->sortable()->toggleable(),
             ])
             ->filters([

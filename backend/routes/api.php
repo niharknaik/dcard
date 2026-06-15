@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AnalyticsController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CardController;
 use App\Http\Controllers\Api\V1\ContentController;
+use App\Http\Controllers\Api\V1\ContentReportController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\PaymentController;
@@ -46,6 +47,8 @@ Route::prefix('v1')->group(function () {
         // Visitor interactions (Phase 4)
         Route::post('public/cards/{slug}/leads', [LeadController::class, 'store']);
         Route::post('public/cards/{slug}/events', [AnalyticsController::class, 'record']);
+        // UGC report/takedown — a visitor reports a public card (COMPLIANCE §5)
+        Route::post('public/cards/{slug}/report', [ContentReportController::class, 'store']);
 
         // Public plans listing (Phase 5)
         Route::get('plans', [PlanController::class, 'index']);
@@ -54,8 +57,10 @@ Route::prefix('v1')->group(function () {
         Route::post('payments/webhook', [PaymentController::class, 'webhook']);
 
         // CMS content (Phase 6)
+        Route::get('content/landing', [ContentController::class, 'landing']);
         Route::get('content/faqs', [ContentController::class, 'faqs']);
         Route::get('content/banners', [ContentController::class, 'banners']);
+        Route::get('content/consent', [ContentController::class, 'consent']);
         Route::get('content/pages/{slug}', [ContentController::class, 'page']);
     });
 
@@ -82,6 +87,7 @@ Route::prefix('v1')->group(function () {
         Route::put('profile', [ProfileController::class, 'update']);
         Route::put('password', [ProfileController::class, 'changePassword']);
         Route::delete('account', [ProfileController::class, 'destroy']);
+        Route::get('account/export', [ProfileController::class, 'export']);
 
         // Cards + nested resources (Phase 3)
         Route::post('cards/{card}/duplicate', [CardController::class, 'duplicate']);
@@ -124,6 +130,7 @@ Route::prefix('v1')->group(function () {
         Route::get('subscription', [SubscriptionController::class, 'current']);
         Route::post('subscriptions/checkout', [SubscriptionController::class, 'checkout']);
         Route::post('payments/verify', [PaymentController::class, 'verify']);
+        Route::post('payments/play/verify', [PaymentController::class, 'verifyPlay']);
         Route::get('payments', [PaymentController::class, 'index']);
         Route::get('payments/{payment}/invoice', [PaymentController::class, 'invoice']);
 
@@ -137,6 +144,7 @@ Route::prefix('v1')->group(function () {
         Route::get('templates/categories', [TemplateController::class, 'categories']);
         Route::get('templates/mine', [TemplateController::class, 'mine']);
         Route::post('templates/verify', [TemplateController::class, 'verify']);
+        Route::post('templates/play/verify', [TemplateController::class, 'verifyPlay']);
         Route::get('templates', [TemplateController::class, 'index']);
         Route::get('templates/{template}', [TemplateController::class, 'show']);
         Route::post('templates/{template}/unlock', [TemplateController::class, 'unlock']);

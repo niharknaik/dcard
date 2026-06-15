@@ -12,7 +12,7 @@ class SubscriptionPlan extends Model
 
     protected $fillable = [
         'name', 'slug', 'code', 'description', 'price', 'currency',
-        'billing_period', 'features', 'card_limit',
+        'billing_period', 'play_product_id', 'features', 'card_limit',
         'allow_portfolio', 'allow_leads', 'allow_team',
         'is_active', 'sort_order',
     ];

@@ -50,6 +50,7 @@ class ManageSettings extends Page implements HasForms
             'admob_enabled' => Setting::get('admob_enabled', false),
             'admob_android_banner_id' => Setting::get('admob_android_banner_id'),
             'admob_ios_banner_id' => Setting::get('admob_ios_banner_id'),
+            'consent_agreement' => Setting::get('consent_agreement', 'I agree that DCard stores my information to create and maintain my digital card, and will not use it for any other purpose without my permission.'),
         ]);
     }
 
@@ -87,6 +88,15 @@ class ManageSettings extends Page implements HasForms
                         TextInput::make('admob_android_banner_id')->label('AdMob Android banner unit ID'),
                         TextInput::make('admob_ios_banner_id')->label('AdMob iOS banner unit ID'),
                     ])->columns(2),
+
+                Section::make('Legal & Consent')
+                    ->schema([
+                        Textarea::make('consent_agreement')
+                            ->rows(4)
+                            ->label('Login / sign-up consent agreement')
+                            ->helperText('Shown to users on the login and sign-up screens. They must accept it to continue.')
+                            ->columnSpanFull(),
+                    ]),
             ])
             ->statePath('data');
     }
@@ -105,6 +115,7 @@ class ManageSettings extends Page implements HasForms
         Setting::set('admob_enabled', (bool) $data['admob_enabled'], 'bool', 'ads');
         Setting::set('admob_android_banner_id', $data['admob_android_banner_id'] ?: null, 'string', 'ads');
         Setting::set('admob_ios_banner_id', $data['admob_ios_banner_id'] ?: null, 'string', 'ads');
+        Setting::set('consent_agreement', $data['consent_agreement'], 'string', 'legal');
 
         ActivityLog::record('settings.updated', null, 'Updated app settings');
 

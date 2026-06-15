@@ -3,6 +3,7 @@ import {Icon} from '../icons';
 import {SaveContactButton} from './SaveContactButton';
 import {CopyLinkButton} from './CopyLinkButton';
 import {DownloadCardButton} from './DownloadCardButton';
+import {LeadForm} from './LeadForm';
 import type {PublicCard} from '@/lib/card';
 
 function initials(name: string): string {
@@ -197,6 +198,12 @@ export function PublicCardView({card, qr}: {card: PublicCard; qr?: string | null
                 </div>
               </Section>
             ) : null}
+
+            <Section title="Get in touch">
+              <div data-html2canvas-ignore="true">
+                <LeadForm slug={card.slug} />
+              </div>
+            </Section>
           </div>
         </div>
 

@@ -2,9 +2,31 @@ import * as React from 'react';
 import {site} from '@/lib/site';
 
 const columns = [
-  {title: 'Product', links: ['Features', 'Pricing', 'How it works', 'FAQ']},
-  {title: 'Company', links: ['About', 'Blog', 'Careers', 'Contact']},
-  {title: 'Legal', links: ['Privacy', 'Terms', 'Security']},
+  {
+    title: 'Product',
+    links: [
+      {label: 'Features', href: '/#features'},
+      {label: 'Pricing', href: '/#pricing'},
+      {label: 'How it works', href: '/#how'},
+      {label: 'FAQ', href: '/#faq'},
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      {label: 'About Us', href: '/about'},
+      {label: 'Contact Us', href: '/contact'},
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      {label: 'Privacy Policy', href: '/privacy'},
+      {label: 'Terms & Conditions', href: '/terms'},
+      {label: 'Refund & Cancellation', href: '/refund'},
+      {label: 'Delete my data', href: '/data-deletion'},
+    ],
+  },
 ];
 
 export function Footer() {
@@ -37,11 +59,11 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-ink">{col.title}</h3>
             <ul className="mt-4 space-y-2.5">
               {col.links.map(link => (
-                <li key={link}>
+                <li key={link.label}>
                   <a
-                    href="#"
+                    href={link.href}
                     className="cursor-pointer text-sm text-ink-soft transition-colors duration-200 hover:text-primary">
-                    {link}
+                    {link.label}
                   </a>
                 </li>
               ))}

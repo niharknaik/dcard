@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {testimonials} from '@/lib/site';
+import type {TestimonialItem} from '@/lib/landing';
 import {Icon} from './icons';
 import {SectionHeading} from './ui/SectionHeading';
 
-export function Testimonials() {
+export function Testimonials({testimonials}: {testimonials: TestimonialItem[]}) {
   return (
     <section id="testimonials" className="relative overflow-hidden">
       <div className="aurora right-[-10%] top-[10%] h-[24rem] w-[24rem] bg-fuchsia-400/20" aria-hidden />

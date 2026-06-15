@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\VerifyPaymentRequest;
+use App\Http\Requests\Payment\VerifyPlayPaymentRequest;
 use App\Http\Resources\V1\PaymentResource;
 use App\Models\Payment;
 use App\Services\InvoiceService;
@@ -23,6 +24,14 @@ class PaymentController extends Controller
     public function verify(VerifyPaymentRequest $request): JsonResponse
     {
         $payment = $this->payments->verify($request->user(), $request->validated());
+
+        return $this->success(new PaymentResource($payment->load('plan')), 'Payment verified.');
+    }
+
+    /** Verify a Google Play Billing subscription purchase (Android). */
+    public function verifyPlay(VerifyPlayPaymentRequest $request): JsonResponse
+    {
+        $payment = $this->payments->verifyPlay($request->user(), $request->validated());
 
         return $this->success(new PaymentResource($payment->load('plan')), 'Payment verified.');
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureNotInMaintenance;
 use App\Http\Middleware\EnsureUserIsActive;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
@@ -20,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Apply hardening response headers to every web + api response.
+        $middleware->append(SecurityHeaders::class);
+
         $middleware->api(
             prepend: [
                 \Illuminate\Http\Middleware\HandleCors::class,

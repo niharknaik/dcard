@@ -9,21 +9,23 @@ import {Pricing} from '@/components/Pricing';
 import {Faq} from '@/components/Faq';
 import {CtaBand} from '@/components/CtaBand';
 import {Footer} from '@/components/Footer';
+import {getLandingContent} from '@/lib/landing';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const content = await getLandingContent();
   return (
     <>
       <Navbar />
       <main>
-        <Hero />
-        <TrustedBy />
-        <Stats />
-        <Features />
-        <HowItWorks />
-        <Testimonials />
-        <Pricing />
-        <Faq />
-        <CtaBand />
+        <Hero hero={content.hero} />
+        <TrustedBy logos={content.trusted_by} />
+        <Stats stats={content.stats} />
+        <Features features={content.features} />
+        <HowItWorks steps={content.steps} />
+        <Testimonials testimonials={content.testimonials} />
+        <Pricing plans={content.pricing} />
+        <Faq faqs={content.faqs} />
+        <CtaBand cta={content.cta} />
       </main>
       <Footer />
     </>

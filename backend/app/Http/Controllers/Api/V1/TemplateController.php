@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Template\ApplyTemplateRequest;
 use App\Http\Requests\Template\UnlockTemplateRequest;
+use App\Http\Requests\Template\VerifyPlayTemplatePurchaseRequest;
 use App\Http\Requests\Template\VerifyTemplatePaymentRequest;
 use App\Http\Resources\V1\CardResource;
 use App\Http\Resources\V1\TemplateCategoryResource;
@@ -86,6 +87,14 @@ class TemplateController extends Controller
     public function verify(VerifyTemplatePaymentRequest $request): JsonResponse
     {
         $purchase = $this->purchases->verify($request->user(), $request->validated());
+
+        return $this->success(new TemplatePurchaseResource($purchase->load('template')), 'Template unlocked.');
+    }
+
+    /** Confirm a Google Play Billing one-time template unlock (Android). */
+    public function verifyPlay(VerifyPlayTemplatePurchaseRequest $request): JsonResponse
+    {
+        $purchase = $this->purchases->verifyPlay($request->user(), $request->validated());
 
         return $this->success(new TemplatePurchaseResource($purchase->load('template')), 'Template unlocked.');
     }

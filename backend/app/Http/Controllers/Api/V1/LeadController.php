@@ -23,6 +23,12 @@ class LeadController extends Controller
 
         abort_if($card === null, 404, 'Card not found.');
 
+        // Honeypot tripped: respond as if successful so bots can't distinguish a
+        // rejection, but never store or notify.
+        if ($request->isBot()) {
+            return $this->created(null, 'Thanks! Your message has been sent.');
+        }
+
         $this->leads->capture($card, $request->validated(), $request->ip());
 
         return $this->created(null, 'Thanks! Your message has been sent.');

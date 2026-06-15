@@ -1,9 +1,8 @@
 import * as React from 'react';
-import {trustedBy} from '@/lib/site';
 
 /** Infinite logo marquee — a credibility strip under the hero. */
-export function TrustedBy() {
-  const row = [...trustedBy, ...trustedBy];
+export function TrustedBy({logos}: {logos: string[]}) {
+  const row = [...logos, ...logos];
   return (
     <section aria-label="Trusted by" className="border-y border-line/70 bg-white/50 py-8">
       <p className="container-px text-center text-xs font-semibold uppercase tracking-[0.2em] text-ink-muted">

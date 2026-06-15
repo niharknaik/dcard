@@ -9,6 +9,7 @@ export const authApi = {
     password: string;
     password_confirmation: string;
     referral_code?: string;
+    accept_terms: boolean;
   }): Promise<AuthPayload> {
     const {data} = await api.post<ApiEnvelope<AuthPayload>>('/auth/register', payload);
     return data.data;

@@ -95,6 +95,8 @@ export interface Plan {
   features: string[];
   card_limit: number;
   unlimited_cards: boolean;
+  /** Google Play product/SKU id, used for Play Billing on Android. */
+  play_product_id?: string | null;
 }
 
 export interface Payment {
@@ -183,6 +185,8 @@ export interface Template {
   is_unlocked: boolean;
   purchases_count: number;
   usage_count: number;
+  /** Google Play product/SKU id, used for Play Billing on Android. */
+  play_product_id?: string | null;
 }
 
 export interface TemplatePurchase {

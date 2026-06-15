@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {stats} from '@/lib/site';
+import type {StatItem} from '@/lib/landing';
 
-export function Stats() {
+export function Stats({stats}: {stats: StatItem[]}) {
   return (
     <section className="container-px py-12">
       <div className="grid grid-cols-2 gap-4 rounded-3xl border border-line bg-white/70 p-6 shadow-soft backdrop-blur sm:grid-cols-4 sm:gap-6 sm:p-8">

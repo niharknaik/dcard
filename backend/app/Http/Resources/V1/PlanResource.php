@@ -18,6 +18,7 @@ class PlanResource extends JsonResource
             'price' => (float) $this->price,
             'currency' => $this->currency,
             'billing_period' => $this->billing_period,
+            'play_product_id' => $this->play_product_id,
             'features' => $this->features ?? [],
             'card_limit' => (int) $this->card_limit,
             'unlimited_cards' => $this->isUnlimitedCards(),

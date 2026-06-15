@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {plans} from '@/lib/site';
+import type {Plan} from '@/lib/site';
 import {Icon} from './icons';
 import {ButtonLink} from './ui/Button';
 import {SectionHeading} from './ui/SectionHeading';
 
-export function Pricing() {
+export function Pricing({plans}: {plans: Plan[]}) {
   return (
     <section id="pricing" className="relative overflow-hidden">
       <div className="aurora right-[-8%] bottom-[10%] h-[26rem] w-[26rem] bg-primary-300/30" aria-hidden />

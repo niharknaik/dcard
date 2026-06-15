@@ -13,7 +13,7 @@ class SettingSeeder extends Seeder
             ['key' => 'maintenance_mode', 'value' => '0', 'type' => 'bool', 'group' => 'general'],
             ['key' => 'signups_enabled', 'value' => '1', 'type' => 'bool', 'group' => 'general'],
             ['key' => 'app_name', 'value' => 'DCard', 'type' => 'string', 'group' => 'general'],
-            ['key' => 'support_email', 'value' => 'support@dcard.app', 'type' => 'string', 'group' => 'support'],
+            ['key' => 'support_email', 'value' => 'info@copg.in', 'type' => 'string', 'group' => 'support'],
             ['key' => 'support_url', 'value' => 'https://dcard.app/help', 'type' => 'string', 'group' => 'support'],
             ['key' => 'announcement_banner', 'value' => null, 'type' => 'string', 'group' => 'general'],
 

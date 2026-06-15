@@ -19,6 +19,7 @@ class PaymentService
         private readonly RazorpayService $razorpay,
         private readonly SubscriptionService $subscriptions,
         private readonly NotificationService $notifications,
+        private readonly GooglePlayService $googlePlay,
     ) {}
 
     /**
@@ -40,6 +41,7 @@ class PaymentService
         $payment = Payment::create([
             'user_id' => $user->id,
             'subscription_plan_id' => $plan->id,
+            'gateway' => 'razorpay',
             'transaction_id' => 'TXN-'.strtoupper(Str::random(14)),
             'amount' => $plan->price,
             'currency' => $plan->currency,
@@ -114,22 +116,105 @@ class PaymentService
         };
     }
 
+    /**
+     * Verify a Google Play subscription purchase and activate the plan.
+     *
+     * Google is the source of truth for which product was bought: we look the
+     * plan up by its play_product_id and ignore any client-sent plan id.
+     *
+     * @param  array{purchase_token:string, product_id:string}  $data
+     *
+     * @throws ValidationException when no plan maps to the verified product.
+     */
+    public function verifyPlay(User $user, array $data): Payment
+    {
+        $purchaseToken = $data['purchase_token'];
+        $productId = $data['product_id'];
+
+        // Throws (fails closed) if the token is invalid / expired / unpaid.
+        $receipt = $this->googlePlay->verifySubscription($productId, $purchaseToken);
+
+        $plan = SubscriptionPlan::where('play_product_id', $productId)->first();
+
+        if (! $plan) {
+            throw ValidationException::withMessages([
+                'product_id' => ['No subscription plan matches this Google Play product.'],
+            ])->status(404);
+        }
+
+        $orderId = $receipt['orderId'] ?? null;
+
+        // Idempotency keyed on the PURCHASE TOKEN. Google does not guarantee an
+        // orderId on every subscription state, so it cannot be the key — keying
+        // on a null orderId would compile to `= NULL` (never matches) and let a
+        // repeat verification grant the subscription again / collide on the
+        // unique transaction_id.
+        $existing = Payment::where('gateway', 'google_play')
+            ->where('user_id', $user->id)
+            ->where('meta->purchase_token', $purchaseToken)
+            ->first();
+
+        if ($existing) {
+            // Already fully processed — return as-is.
+            if ($existing->status === PaymentStatus::Paid) {
+                return $existing;
+            }
+
+            // A prior attempt created the row but failed before activation
+            // completed; resume rather than create a duplicate payment.
+            $existing = $this->activateForPlan($existing, $plan);
+            $this->googlePlay->acknowledgeSubscription($productId, $purchaseToken);
+
+            return $existing;
+        }
+
+        $payment = Payment::create([
+            'user_id' => $user->id,
+            'subscription_plan_id' => $plan->id,
+            'gateway' => 'google_play',
+            'transaction_id' => $orderId ?: 'GPA-'.strtoupper(Str::random(14)),
+            'amount' => $plan->price,
+            'currency' => $plan->currency,
+            'status' => PaymentStatus::Created,
+            'meta' => ['purchase_token' => $purchaseToken, 'product_id' => $productId],
+        ]);
+
+        $payment = $this->activateForPlan($payment, $plan);
+
+        // Acknowledge last so a settled-but-unacknowledged purchase is not lost.
+        $this->googlePlay->acknowledgeSubscription($productId, $purchaseToken);
+
+        return $payment;
+    }
+
     private function markPaidAndActivate(Payment $payment, ?string $razorpayPaymentId, ?string $signature): Payment
     {
-        return DB::transaction(function () use ($payment, $razorpayPaymentId, $signature) {
+        return $this->activateForPlan($payment, $payment->plan, [
+            'razorpay_payment_id' => $razorpayPaymentId,
+            'razorpay_signature' => $signature,
+        ]);
+    }
+
+    /**
+     * Shared post-verification activation used by BOTH the Razorpay and the
+     * Google Play paths: activate the subscription, mark the payment paid,
+     * generate the invoice number, and notify the user.
+     *
+     * @param  array<string, mixed>  $extra  gateway-specific columns to persist
+     */
+    private function activateForPlan(Payment $payment, SubscriptionPlan $plan, array $extra = []): Payment
+    {
+        return DB::transaction(function () use ($payment, $plan, $extra) {
             $user = $payment->user;
-            $plan = $payment->plan;
 
             $subscription = $this->subscriptions->activate($user, $plan);
 
-            $payment->update([
-                'razorpay_payment_id' => $razorpayPaymentId,
-                'razorpay_signature' => $signature,
+            $payment->update(array_merge($extra, [
                 'status' => PaymentStatus::Paid,
                 'paid_at' => now(),
                 'invoice_number' => $this->generateInvoiceNumber(),
                 'subscription_id' => $subscription->id,
-            ]);
+            ]));
 
             $this->notifications->send(
                 $user,

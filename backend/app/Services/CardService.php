@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Card;
 use App\Models\User;
 use App\Repositories\Contracts\CardRepositoryInterface;
+use App\Support\ImageSanitizer;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,8 @@ class CardService
             $data['slug'] = $this->slugs->unique($data['slug'] ?? $data['full_name']);
 
             if (isset($data['profile_photo']) && $data['profile_photo'] instanceof UploadedFile) {
-                $data['profile_photo'] = $data['profile_photo']->store('cards/photos', 'public');
+                // Strip EXIF/GPS metadata before persisting (data minimisation).
+                $data['profile_photo'] = ImageSanitizer::storeSanitized($data['profile_photo'], 'cards/photos', 'public');
             }
 
             // First card becomes the user's default.
@@ -62,7 +64,8 @@ class CardService
             if ($card->profile_photo) {
                 Storage::disk('public')->delete($card->profile_photo);
             }
-            $data['profile_photo'] = $data['profile_photo']->store('cards/photos', 'public');
+            // Strip EXIF/GPS metadata before persisting (data minimisation).
+            $data['profile_photo'] = ImageSanitizer::storeSanitized($data['profile_photo'], 'cards/photos', 'public');
         }
 
         return $this->cards->update($card, $data);

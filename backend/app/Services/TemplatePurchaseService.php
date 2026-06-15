@@ -25,6 +25,7 @@ class TemplatePurchaseService
     public function __construct(
         private readonly RazorpayService $razorpay,
         private readonly RewardService $rewards,
+        private readonly GooglePlayService $googlePlay,
     ) {}
 
     /**
@@ -90,7 +91,103 @@ class TemplatePurchaseService
             throw ValidationException::withMessages(['payment' => ['Payment verification failed.']]);
         }
 
-        return DB::transaction(function () use ($purchase, $user, $data) {
+        return $this->completeUnlock($user, $purchase, [
+            'razorpay_payment_id' => $data['razorpay_payment_id'],
+            'razorpay_signature'  => $data['razorpay_signature'],
+        ]);
+    }
+
+    /**
+     * Confirm a Google Play one-time product unlock for a template.
+     *
+     * Google is the source of truth for the purchased product: we resolve the
+     * template by play_product_id and confirm it matches the client-sent
+     * template_id (guards against a token bought for a different template).
+     *
+     * @param  array{purchase_token:string, product_id:string, template_id:int, method?:string}  $data
+     *
+     * @throws ValidationException on product/template mismatch or unknown product.
+     */
+    public function verifyPlay(User $user, array $data): TemplatePurchase
+    {
+        $purchaseToken = $data['purchase_token'];
+        $productId = $data['product_id'];
+        $templateId = (int) $data['template_id'];
+
+        // Throws (fails closed) if the token is invalid or not in a purchased state.
+        $this->googlePlay->verifyProduct($productId, $purchaseToken);
+
+        $template = Template::where('play_product_id', $productId)->first();
+
+        if (! $template) {
+            throw ValidationException::withMessages([
+                'product_id' => ['No template matches this Google Play product.'],
+            ])->status(404);
+        }
+
+        if ((int) $template->id !== $templateId) {
+            throw ValidationException::withMessages([
+                'template_id' => ['The Google Play product does not match the requested template.'],
+            ]);
+        }
+
+        if (! $template->is_active) {
+            throw ValidationException::withMessages(['template' => ['This template is not available.']]);
+        }
+
+        $existing = TemplatePurchase::where('user_id', $user->id)
+            ->where('template_id', $template->id)
+            ->first();
+
+        if ($existing && $existing->status === TemplatePurchaseStatus::Completed) {
+            // Already unlocked — make sure Google is acknowledged, then return.
+            $this->googlePlay->acknowledgeProduct($productId, $purchaseToken);
+
+            return $existing;
+        }
+
+        // Play unlocks are always pure money: the points / "mixed" reservation
+        // flow runs only on the web (Razorpay) path. Ignore any client-sent
+        // method so a crafted "mixed" request can't trigger a points debit.
+        $method = TemplateUnlockMethod::Money;
+        $pointsToSpend = 0;
+
+        // template_purchases has no JSON meta column, so the Play purchase token is
+        // persisted in transaction_id (the row's gateway reference). The internal
+        // razorpay fields stay null for Play unlocks.
+        $purchase = TemplatePurchase::updateOrCreate(
+            ['user_id' => $user->id, 'template_id' => $template->id],
+            [
+                'unlock_method'  => $method,
+                'amount'         => (float) $template->price,
+                'currency'       => $template->currency,
+                'points_spent'   => $pointsToSpend,
+                'gateway'        => 'google_play',
+                'status'         => TemplatePurchaseStatus::Pending,
+                'transaction_id' => $purchaseToken,
+            ],
+        );
+
+        $purchase = $this->completeUnlock($user, $purchase, [
+            'gateway' => 'google_play',
+        ]);
+
+        // Acknowledge last so a completed-but-unacknowledged unlock is not lost.
+        $this->googlePlay->acknowledgeProduct($productId, $purchaseToken);
+
+        return $purchase;
+    }
+
+    /**
+     * Shared post-verification completion used by BOTH the Razorpay and the
+     * Google Play paths: debit any reserved points, mark the purchase complete,
+     * and bump the template's purchases_count.
+     *
+     * @param  array<string, mixed>  $extra  gateway-specific columns to persist
+     */
+    private function completeUnlock(User $user, TemplatePurchase $purchase, array $extra = []): TemplatePurchase
+    {
+        return DB::transaction(function () use ($purchase, $user, $extra) {
             // Mixed unlocks also spend the reserved points — debit them now.
             if ($purchase->points_spent > 0) {
                 $this->rewards->debit(
@@ -102,12 +199,10 @@ class TemplatePurchaseService
                 );
             }
 
-            $purchase->update([
-                'razorpay_payment_id' => $data['razorpay_payment_id'],
-                'razorpay_signature'  => $data['razorpay_signature'],
-                'status'              => TemplatePurchaseStatus::Completed,
-                'paid_at'             => now(),
-            ]);
+            $purchase->update(array_merge($extra, [
+                'status'  => TemplatePurchaseStatus::Completed,
+                'paid_at' => now(),
+            ]));
 
             $purchase->template()->increment('purchases_count');
 
@@ -215,6 +310,7 @@ class TemplatePurchaseService
                 'amount'         => $amount,
                 'currency'       => $template->currency,
                 'points_spent'   => $pointsToSpend,
+                'gateway'        => 'razorpay',
                 'status'         => TemplatePurchaseStatus::Pending,
                 'transaction_id' => 'TPL-'.strtoupper(Str::random(14)),
             ],

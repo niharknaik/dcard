@@ -9,6 +9,12 @@ jest.mock('@/store/auth.store', () => ({
     selector({register: mockRegister}),
 }));
 
+// The screen fetches consent copy on mount; keep it off the network and let the
+// default agreement text render.
+jest.mock('@/api/content.api', () => ({
+  contentApi: {consent: jest.fn().mockResolvedValue('')},
+}));
+
 function setup() {
   const navigation = {navigate: jest.fn()};
   const utils = renderWithProviders(
@@ -22,11 +28,19 @@ function setup() {
   return {navigation, name, email, phone, password, confirm};
 }
 
+// The Sign Up button is disabled until the consent checkbox is ticked.
+function acceptConsent() {
+  // The checkbox label sits in a no-hide-descendants subtree, so query the
+  // pressable checkbox by its accessibility label instead of the visible text.
+  fireEvent.press(screen.getByLabelText(/I agree that DCard stores my information/));
+}
+
 function fillValidForm(f: ReturnType<typeof setup>) {
   fireEvent.changeText(f.name, '  Jane Doe  ');
   fireEvent.changeText(f.email, '  jane@example.com  ');
   fireEvent.changeText(f.password, 's3cret');
   fireEvent.changeText(f.confirm, 's3cret');
+  acceptConsent();
 }
 
 beforeEach(() => {
@@ -44,6 +58,7 @@ describe('RegisterScreen', () => {
     const f = setup();
     fireEvent.changeText(f.password, 's3cret');
     fireEvent.changeText(f.confirm, 'different');
+    acceptConsent();
     fireEvent.press(screen.getByText('Sign Up'));
 
     expect(screen.getByText('Passwords do not match.')).toBeOnTheScreen();
@@ -63,6 +78,8 @@ describe('RegisterScreen', () => {
       phone: undefined,
       password: 's3cret',
       password_confirmation: 's3cret',
+      referral_code: undefined,
+      accept_terms: true,
     });
   });
 

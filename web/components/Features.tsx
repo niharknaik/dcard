@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {features} from '@/lib/site';
+import type {FeatureItem} from '@/lib/landing';
 import {Icon} from './icons';
 import {SectionHeading} from './ui/SectionHeading';
 
-export function Features() {
+export function Features({features}: {features: FeatureItem[]}) {
   return (
     <section id="features" className="relative overflow-hidden">
       <div className="aurora left-[-8%] top-[20%] h-[24rem] w-[24rem] bg-violet-400/20" aria-hidden />

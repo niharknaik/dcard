@@ -20,6 +20,7 @@ class RegisterRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
             'referral_code' => ['nullable', 'string', 'max:32'],
+            'accept_terms' => ['required', 'accepted'],
         ];
     }
 }

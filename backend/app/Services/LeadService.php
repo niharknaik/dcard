@@ -32,6 +32,8 @@ class LeadService
             'message' => $data['message'] ?? null,
             'source' => $data['source'] ?? 'public',
             'ip_address' => $ip,
+            // Consent is validated as "accepted" upstream; record when it happened.
+            'consent_accepted_at' => now(),
         ]);
 
         $owner = $card->user;

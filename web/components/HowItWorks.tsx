@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {steps} from '@/lib/site';
+import type {StepItem} from '@/lib/landing';
 import {SectionHeading} from './ui/SectionHeading';
 
-export function HowItWorks() {
+export function HowItWorks({steps}: {steps: StepItem[]}) {
   return (
     <section id="how" className="relative bg-white">
       <div className="container-px py-20 sm:py-28">

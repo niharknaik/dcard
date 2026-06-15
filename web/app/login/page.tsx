@@ -13,6 +13,19 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [accepted, setAccepted] = React.useState(false);
+  const [agreement, setAgreement] = React.useState('I agree that DCard stores my information to create and maintain my digital card, and will not use it for any other purpose without my permission.');
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const res = await apiFetch<{text: string}>('/content/consent');
+        if (res?.text) setAgreement(res.text);
+      } catch {
+        /* keep default */
+      }
+    })();
+  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,9 +94,30 @@ export default function LoginPage() {
 
           {error ? <p className="mt-3 text-sm text-red-500">{error}</p> : null}
 
+          <label className="mt-5 flex cursor-pointer items-start gap-2.5 text-xs text-ink-soft">
+            <input
+              type="checkbox"
+              checked={accepted}
+              onChange={e => setAccepted(e.target.checked)}
+              required
+              className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-line accent-primary"
+            />
+            <span>
+              {agreement} See our{' '}
+              <a href="/privacy" className="font-semibold text-primary hover:underline">
+                Privacy Policy
+              </a>{' '}
+              and{' '}
+              <a href="/terms" className="font-semibold text-primary hover:underline">
+                Terms
+              </a>
+              .
+            </span>
+          </label>
+
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !accepted}
             className="mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-brand-gradient bg-[length:160%_160%] px-5 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:bg-[position:100%_50%] hover:shadow-glow-lg disabled:opacity-60">
             {loading ? 'Signing in…' : 'Sign in'}
             {!loading ? <Icon name="arrowRight" width={16} height={16} /> : null}

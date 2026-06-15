@@ -18,6 +18,7 @@ interface AuthState {
     password: string;
     password_confirmation: string;
     referral_code?: string;
+    accept_terms: boolean;
   }) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: User) => void;

@@ -24,6 +24,7 @@ describe('authApi', () => {
       email: 'jane@example.com',
       password: 'pw',
       password_confirmation: 'pw',
+      accept_terms: true,
     };
     const result = await authApi.register(payload);
 
