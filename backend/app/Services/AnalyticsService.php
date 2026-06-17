@@ -69,6 +69,10 @@ class AnalyticsService
     {
         [$from, $to] = $this->periodRange($period);
 
+        // Roll up today's raw events on-the-fly so the dashboard reflects visits
+        // in real time (the scheduled rollup only covers completed days).
+        $this->aggregateForDate(now());
+
         $series = CardAnalyticsDaily::where('card_id', $card->id)
             ->whereBetween('date', [$from->toDateString(), $to->toDateString()])
             ->orderBy('date')
@@ -98,6 +102,9 @@ class AnalyticsService
     {
         [$from, $to] = $this->periodRange($period);
         $cardIds = $user->cards()->pluck('id');
+
+        // Roll up today's raw events on-the-fly so today's visits show immediately.
+        $this->aggregateForDate(now());
 
         $series = CardAnalyticsDaily::whereIn('card_id', $cardIds)
             ->whereBetween('date', [$from->toDateString(), $to->toDateString()])
