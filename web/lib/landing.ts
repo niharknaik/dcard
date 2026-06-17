@@ -73,8 +73,8 @@ export const defaultLandingContent: LandingContent = {
     description: site.description,
     primary_cta: 'Get the app',
     secondary_cta: 'See how it works',
-    rating: '4.8',
-    rating_caption: 'Loved by 10,000+ professionals',
+    rating: '',
+    rating_caption: '',
   },
   stats,
   features,
@@ -87,7 +87,7 @@ export const defaultLandingContent: LandingContent = {
     badge: 'Free forever — no credit card needed',
     title: 'Ready to go digital?',
     description:
-      'Create your card in minutes and start sharing today. Join 10,000+ professionals who never run out of business cards again.',
+      'Create your card in minutes and start sharing today — no more running out of business cards.',
   },
 };
 

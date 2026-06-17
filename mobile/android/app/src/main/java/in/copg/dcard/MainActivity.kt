@@ -1,4 +1,4 @@
-package com.dcard
+package `in`.copg.dcard
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

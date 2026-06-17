@@ -45,29 +45,6 @@ export function Hero({hero}: {hero: HeroContent}) {
             </ButtonLink>
           </div>
 
-          {/* Social proof row */}
-          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <div className="flex items-center">
-              {['from-violet-500 to-primary-600', 'from-primary-500 to-fuchsia-500', 'from-fuchsia-500 to-violet-600', 'from-accent-500 to-primary-500'].map(
-                (g, i) => (
-                  <span
-                    key={i}
-                    className={`-ml-2 grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-gradient-to-br ${g} text-[11px] font-bold text-white first:ml-0`}>
-                    {['JS', 'MK', 'AR', 'Tn'][i]}
-                  </span>
-                ),
-              )}
-            </div>
-            <div>
-              <div className="flex items-center gap-0.5 text-amber-400">
-                {Array.from({length: 5}).map((_, i) => (
-                  <Icon key={i} name="star" width={15} height={15} />
-                ))}
-                <span className="ml-1.5 text-sm font-semibold text-ink">{hero.rating}</span>
-              </div>
-              <p className="text-sm text-ink-muted">{hero.rating_caption}</p>
-            </div>
-          </div>
         </div>
 
         <div className="relative animate-fade-up delay-150 lg:justify-self-end">

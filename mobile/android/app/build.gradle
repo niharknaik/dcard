@@ -87,13 +87,16 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.dcard"
+    namespace "in.copg.dcard"
     defaultConfig {
-        applicationId "com.dcard"
+        applicationId "in.copg.dcard"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        // react-native-iap ships both 'play' and 'amazon' product flavors; pick Google Play
+        // so Gradle can resolve the dependency (otherwise variant selection is ambiguous).
+        missingDimensionStrategy "store", "play"
     }
     signingConfigs {
         debug {

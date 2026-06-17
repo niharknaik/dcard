@@ -1,4 +1,4 @@
-package com.dcard
+package `in`.copg.dcard
 
 import android.app.Application
 import com.facebook.react.PackageList

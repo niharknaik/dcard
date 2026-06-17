@@ -12,9 +12,9 @@ export const site = {
 };
 
 export const stats = [
-  {value: '10k+', label: 'Cards created'},
-  {value: '4.8★', label: 'Average rating'},
-  {value: '120+', label: 'Countries'},
+  {value: '₹0', label: 'Free to start'},
+  {value: 'QR + Link', label: 'Tap to share'},
+  {value: 'Privacy-first', label: 'No third-party trackers'},
   {value: '0', label: 'Paper wasted'},
 ];
 
@@ -97,33 +97,13 @@ export const plans: Plan[] = [
   },
 ];
 
-export const trustedBy = ['Lumen', 'Northwind', 'Acme Co', 'Vertex', 'Polaris', 'Meridian', 'Cobalt', 'Skyline'];
+// No fabricated client logos. Populate with real customers once you have them.
+export const trustedBy: string[] = [];
 
 export type Testimonial = {quote: string; name: string; role: string; initials: string};
 
-export const testimonials: Testimonial[] = [
-  {
-    quote:
-      'I shared my DCard at a conference and had 14 leads in my inbox before I got home. It paid for itself the first week.',
-    name: 'Aarav Rao',
-    role: 'Product Designer, Lumen',
-    initials: 'AR',
-  },
-  {
-    quote:
-      'Our whole sales team switched to DCard. The analytics tell us exactly which events are worth attending.',
-    name: 'Meera Shah',
-    role: 'Head of Sales, Vertex',
-    initials: 'MS',
-  },
-  {
-    quote:
-      'Clean, fast, and it just works on every phone. People are genuinely impressed when I tap to share.',
-    name: 'Daniel Okafor',
-    role: 'Founder, Cobalt Studio',
-    initials: 'DO',
-  },
-];
+// No fabricated testimonials. Add real, attributable reviews once you have them.
+export const testimonials: Testimonial[] = [];
 
 export const faqs = [
   {

@@ -34,13 +34,6 @@ export function CtaBand({cta}: {cta: CtaContent}) {
             href="#"
             variant="secondary"
             className="border-transparent bg-white px-6 text-ink hover:bg-white">
-            <Icon name="apple" />
-            App Store
-          </ButtonLink>
-          <ButtonLink
-            href="#"
-            variant="secondary"
-            className="border-transparent bg-white px-6 text-ink hover:bg-white">
             <Icon name="play" />
             Google Play
           </ButtonLink>

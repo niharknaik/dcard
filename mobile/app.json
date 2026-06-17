@@ -1,9 +1,9 @@
 {
   "name": "DCard",
   "displayName": "DCard",
-  "_comment_admob": "android_app_id / ios_app_id below are GOOGLE TEST App IDs (safe, valid). Replace with your REAL AdMob App IDs (ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY) before a production release. Banner ad-UNIT ids are configured server-side in Admin > Settings > Ads (admob_android_banner_id / admob_ios_banner_id) and toggled with admob_enabled.",
+  "_comment_admob": "android_app_id is the REAL DCard AdMob App ID (COPG Global). ios_app_id remains a GOOGLE TEST App ID (no iOS release planned). Banner ad-UNIT ids are configured server-side in Admin > Settings > Ads (admob_android_banner_id / admob_ios_banner_id) and toggled with admob_enabled.",
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-3940256099942544~3347511713",
+    "android_app_id": "ca-app-pub-9781294008914170~7699469148",
     "ios_app_id": "ca-app-pub-3940256099942544~1458002511"
   }
 }
