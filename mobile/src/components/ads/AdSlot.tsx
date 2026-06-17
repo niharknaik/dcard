@@ -84,7 +84,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
     borderRadius: radius.md,
     overflow: 'hidden',
-    backgroundColor: colors.surfaceAlt,
+    // No background — an empty/loading ad slot must be invisible (it was
+    // showing as a grey strip/line above the bottom tab bar).
   },
   image: {width: '100%', height: 96},
 });

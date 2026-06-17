@@ -10,6 +10,10 @@ return [
     'card_public_base_url' => env('CARD_PUBLIC_BASE_URL', env('APP_URL')),
     'frontend_url' => env('APP_FRONTEND_URL', env('APP_URL')),
 
+    // Base URL for referral invite links (the web app, NOT the API). Falls back
+    // to the frontend URL so /ref/{code} resolves to the website, not the API.
+    'referral_base_url' => env('APP_REFERRAL_BASE_URL', env('APP_FRONTEND_URL', env('APP_URL'))),
+
     'timezone' => env('APP_TIMEZONE', 'UTC'),
     'locale' => env('APP_LOCALE', 'en'),
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
