@@ -18,9 +18,8 @@ export function LegalLayout({title, lastUpdated, children}: LegalLayoutProps) {
       <header className="sticky top-0 z-30 border-b border-line bg-white/80 backdrop-blur-xl">
         <div className="container-px flex h-16 items-center">
           <a href="/" className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-gradient text-base font-bold text-white shadow-glow">
-              D
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/mark.svg" alt="" width={36} height={36} className="h-9 w-9 rounded-xl shadow-glow" />
             <span className="font-display text-lg font-bold text-ink">{site.name}</span>
           </a>
         </div>

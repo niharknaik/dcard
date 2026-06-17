@@ -54,9 +54,8 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <a href="/" className="inline-flex items-center gap-2.5">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-gradient text-lg font-bold text-white shadow-glow">
-              D
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/mark.svg" alt="" width={40} height={40} className="h-10 w-10 rounded-xl shadow-glow" />
             <span className="font-display text-xl font-bold text-ink">DCard</span>
           </a>
           <h1 className="mt-6 text-2xl font-bold">Welcome back</h1>

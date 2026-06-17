@@ -35,9 +35,8 @@ export function Footer() {
       <div className="container-px grid gap-10 py-14 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-gradient text-base font-bold text-white shadow-glow">
-              D
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/mark.svg" alt="" width={36} height={36} className="h-9 w-9 rounded-xl shadow-glow" />
             <span className="font-display text-lg font-bold text-ink">{site.name}</span>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-soft">{site.tagline}</p>
