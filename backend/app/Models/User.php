@@ -11,8 +11,9 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Concerns\HasRoles;
 use App\Notifications\ResetPasswordNotification;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Filament\Models\Contracts\FilamentUser;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, FilamentUser
 {
     use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
