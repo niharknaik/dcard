@@ -73,6 +73,11 @@ class TemplateService
 
         $theme = $card->theme ?? [];
         $theme['primary'] = $color ?: ($template->color_scheme ?: ($theme['primary'] ?? null));
+        // Carry the template's accent colour + font so the public card renders
+        // a distinct, on-brand design (not just a recoloured header).
+        $config = $template->config ?? [];
+        $theme['accent'] = $config['colors']['accent'] ?? ($theme['accent'] ?? null);
+        $theme['font'] = $template->font_family ?: ($theme['font'] ?? null);
 
         $card->forceFill(['template_id' => $template->id, 'theme' => $theme])->save();
         $template->increment('usage_count');

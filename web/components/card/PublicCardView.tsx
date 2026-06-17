@@ -24,6 +24,9 @@ type Action = {icon: string; label: string; href: string};
 
 export function PublicCardView({card, qr}: {card: PublicCard; qr?: string | null}) {
   const subtitle = [card.designation, card.company].filter(Boolean).join(' · ');
+  // Template-driven accent: recolour key elements to the card's primary colour.
+  const tint = card.theme?.primary || undefined;
+  const tintStyle = tint ? {color: tint} : undefined;
 
   const actions: Action[] = [];
   if (card.phone) actions.push({icon: 'call', label: 'Call', href: `tel:${card.phone}`});
@@ -59,7 +62,9 @@ export function PublicCardView({card, qr}: {card: PublicCard; qr?: string | null
             style={
               card.theme?.primary
                 ? {
-                    backgroundImage: `linear-gradient(135deg, ${card.theme.primary} 0%, color-mix(in srgb, ${card.theme.primary} 55%, #0B1020) 100%)`,
+                    backgroundImage: `linear-gradient(135deg, ${card.theme.primary} 0%, ${
+                      card.theme.accent || `color-mix(in srgb, ${card.theme.primary} 55%, #0B1020)`
+                    } 100%)`,
                   }
                 : undefined
             }>
@@ -99,6 +104,7 @@ export function PublicCardView({card, qr}: {card: PublicCard; qr?: string | null
                   href={a.href}
                   target={a.href.startsWith('http') ? '_blank' : undefined}
                   rel="noopener noreferrer"
+                  style={tintStyle}
                   className="grid cursor-pointer place-items-center gap-1 rounded-2xl border border-line/60 bg-white py-3 text-primary shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:text-violet-600 hover:shadow-card">
                   <Icon name={a.icon} width={20} height={20} />
                   <span className="text-[11px] font-medium text-ink-soft">{a.label}</span>
@@ -175,7 +181,7 @@ export function PublicCardView({card, qr}: {card: PublicCard; qr?: string | null
                       <div className="flex items-baseline justify-between gap-3">
                         <p className="font-semibold text-ink">{s.name}</p>
                         {s.price != null ? (
-                          <p className="shrink-0 text-sm font-semibold text-primary">
+                          <p style={tintStyle} className="shrink-0 text-sm font-semibold text-primary">
                             {s.currency === 'INR' || !s.currency ? '₹' : s.currency + ' '}
                             {s.price}
                           </p>

@@ -53,7 +53,7 @@ export interface PublicCard {
   address: string | null;
   about: string | null;
   public_url: string | null;
-  theme?: {primary?: string | null} | null;
+  theme?: {primary?: string | null; accent?: string | null; font?: string | null} | null;
   social_links?: SocialLink[];
   services?: Service[];
   portfolio?: PortfolioItem[];

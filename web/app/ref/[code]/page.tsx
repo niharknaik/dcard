@@ -1,10 +1,5 @@
 import type {Metadata} from 'next';
 
-export const metadata: Metadata = {
-  title: "You're invited to DCard",
-  description: 'Join DCard — your digital visiting card. Use this invite code when you sign up.',
-};
-
 type Params = {params: {code: string}};
 
 export function generateMetadata({params}: Params): Metadata {
