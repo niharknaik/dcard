@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     'How DCard, a product of COPG Global, collects, uses, shares and protects your personal data, and your rights under the Digital Personal Data Protection Act, 2023.',
 };
 
-const LAST_UPDATED = '14 June 2026';
+const LAST_UPDATED = '17 June 2026';
 
 export default function PrivacyPage() {
   return (
@@ -170,7 +170,7 @@ export default function PrivacyPage() {
         </p>
         <ul className="list-none space-y-1 pl-0">
           <li>
-            <span className="font-semibold text-ink">Name:</span> [Grievance Officer name placeholder], COPG Global
+            <span className="font-semibold text-ink">Name:</span> Rahul, COPG Global
           </li>
           <li>
             <span className="font-semibold text-ink">Email:</span>{' '}
@@ -179,10 +179,10 @@ export default function PrivacyPage() {
             </a>
           </li>
           <li>
-            <span className="font-semibold text-ink">Address:</span> [COPG Global registered address]
+            <span className="font-semibold text-ink">Address:</span> Bangalore 560083
           </li>
           <li>
-            <span className="font-semibold text-ink">Phone:</span> [COPG Global phone placeholder]
+            <span className="font-semibold text-ink">Phone:</span> +91 9844794578
           </li>
         </ul>
         <p>
@@ -204,7 +204,7 @@ export default function PrivacyPage() {
           <a href="mailto:info@copg.in" className="font-semibold text-primary hover:underline">
             info@copg.in
           </a>
-          . Postal address: [COPG Global registered address].
+          . Postal address: Bangalore 560083.
         </p>
       </LegalSection>
     </LegalLayout>

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     'The terms and conditions governing your use of DCard, a digital visiting-card service and product of COPG Global.',
 };
 
-const LAST_UPDATED = '14 June 2026';
+const LAST_UPDATED = '17 June 2026';
 
 export default function TermsPage() {
   return (
@@ -137,8 +137,7 @@ export default function TermsPage() {
 
       <LegalSection title="13. Governing law &amp; jurisdiction">
         <p>
-          These Terms are governed by the laws of India. Subject to applicable law, the courts at [COPG Global
-          registered address jurisdiction], India, will have exclusive jurisdiction over any dispute arising out of
+          These Terms are governed by the laws of India. Subject to applicable law, the courts at Bangalore, India, will have exclusive jurisdiction over any dispute arising out of
           or relating to these Terms or the service.
         </p>
       </LegalSection>
@@ -157,7 +156,7 @@ export default function TermsPage() {
           <a href="mailto:info@copg.in" className="font-semibold text-primary hover:underline">
             info@copg.in
           </a>
-          . Postal address: [COPG Global registered address].
+          . Postal address: Bangalore 560083.
         </p>
       </LegalSection>
     </LegalLayout>
