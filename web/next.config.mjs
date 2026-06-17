@@ -1,10 +1,19 @@
 /** @type {import('next').NextConfig} */
 
-// Allow the app to call its backend API. If NEXT_PUBLIC_API_URL is set we
-// whitelist that exact origin in connect-src; otherwise we fall back to the
-// broad `https:` source. NOTE: tighten by always setting NEXT_PUBLIC_API_URL
-// in the deploy environment so connect-src is pinned to the real API origin.
-const apiOrigin = process.env.NEXT_PUBLIC_API_URL || 'https:';
+// Allow the app to call its backend API. We whitelist the API's ORIGIN in
+// connect-src. IMPORTANT: NEXT_PUBLIC_API_URL includes a path (…/api/v1), but a
+// CSP source carrying a path only matches that exact URL — which would block
+// sub-paths like /api/v1/auth/login. So we strip it down to scheme://host.
+// Falls back to the broad `https:` source if the URL is unset/unparseable.
+function apiOriginFrom(value) {
+  if (!value) return 'https:';
+  try {
+    return new URL(value).origin;
+  } catch {
+    return 'https:';
+  }
+}
+const apiOrigin = apiOriginFrom(process.env.NEXT_PUBLIC_API_URL);
 
 const contentSecurityPolicy = [
   "default-src 'self'",
