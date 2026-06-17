@@ -53,6 +53,8 @@ class TemplateSeeder extends Seeder
                 [
                     'template_category_id' => $categories[$catSlug] ?? null,
                     'name'         => $name,
+                    // Designed preview graphic (gradient + business icon), served by the web app.
+                    'thumbnail'    => rtrim(config('app.frontend_url'), '/').'/templates/'.Str::slug($name).'.png',
                     'description'  => "A {$name} digital card template — polished {$layout} layout with a curated colour scheme.",
                     'layout'       => $layout,
                     'color_scheme' => $primary,
