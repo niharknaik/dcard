@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, Image, StyleSheet, View} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {Button, Divider, IconButton, List, Menu, Snackbar, Text, TextInput} from 'react-native-paper';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ScreenContainer} from '@/components/ui/ScreenContainer';
@@ -38,6 +39,9 @@ export function CardEditorScreen({route, navigation}: Props) {
   const [serviceName, setServiceName] = useState('');
   const [servicePrice, setServicePrice] = useState('');
   const [addingService, setAddingService] = useState(false);
+
+  // Image upload state ('profile_photo' | 'banner' while that upload runs).
+  const [uploading, setUploading] = useState<'profile_photo' | 'banner' | null>(null);
 
   const set = (key: keyof CardInput) => (value: string) => setForm(prev => ({...prev, [key]: value}));
 
@@ -164,6 +168,29 @@ export function CardEditorScreen({route, navigation}: Props) {
     }
   };
 
+  const pickAndUpload = async (field: 'profile_photo' | 'banner') => {
+    if (!cardId) {
+      return;
+    }
+    const res = await launchImageLibrary({mediaType: 'photo', quality: 0.8, selectionLimit: 1});
+    const asset = res.assets?.[0];
+    if (res.didCancel || !asset?.uri) {
+      return;
+    }
+    setUploading(field);
+    try {
+      const updated = await cardsApi.uploadImages(cardId, {
+        [field]: {uri: asset.uri, fileName: asset.fileName, type: asset.type},
+      });
+      setCard(updated);
+      setSnack(field === 'banner' ? 'Banner updated.' : 'Profile photo updated.');
+    } catch (e) {
+      setSnack(apiErrorMessage(e));
+    } finally {
+      setUploading(null);
+    }
+  };
+
   if (loading) {
     return (
       <ScreenContainer>
@@ -197,6 +224,43 @@ export function CardEditorScreen({route, navigation}: Props) {
             <Button mode="outlined" icon="content-copy" onPress={onDuplicate}>
               Duplicate
             </Button>
+          </View>
+
+          <Divider style={styles.divider} />
+          <Text variant="titleMedium">Photos</Text>
+          <View style={styles.photoRow}>
+            <View style={styles.photoCol}>
+              <Text style={styles.muted}>Profile photo</Text>
+              {card.profile_photo ? (
+                <Image source={{uri: card.profile_photo}} style={styles.avatar} />
+              ) : (
+                <View style={[styles.avatar, styles.placeholder]} />
+              )}
+              <Button
+                mode="outlined"
+                icon="camera"
+                onPress={() => pickAndUpload('profile_photo')}
+                loading={uploading === 'profile_photo'}
+                disabled={!!uploading}>
+                Choose
+              </Button>
+            </View>
+            <View style={styles.photoCol}>
+              <Text style={styles.muted}>Banner</Text>
+              {card.banner ? (
+                <Image source={{uri: card.banner}} style={styles.banner} />
+              ) : (
+                <View style={[styles.banner, styles.placeholder]} />
+              )}
+              <Button
+                mode="outlined"
+                icon="image"
+                onPress={() => pickAndUpload('banner')}
+                loading={uploading === 'banner'}
+                disabled={!!uploading}>
+                Choose
+              </Button>
+            </View>
           </View>
 
           <Divider style={styles.divider} />
@@ -306,4 +370,9 @@ const styles = StyleSheet.create({
   platformBtn: {justifyContent: 'center'},
   priceInput: {width: 110},
   addBtn: {marginTop: spacing.sm, alignSelf: 'flex-start'},
+  photoRow: {flexDirection: 'row', gap: spacing.md, marginTop: spacing.sm},
+  photoCol: {flex: 1, alignItems: 'center', gap: spacing.sm},
+  avatar: {width: 80, height: 80, borderRadius: 40},
+  banner: {width: '100%', height: 64, borderRadius: 8},
+  placeholder: {backgroundColor: colors.surfaceAlt},
 });

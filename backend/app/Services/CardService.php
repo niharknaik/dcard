@@ -38,6 +38,10 @@ class CardService
                 $data['profile_photo'] = ImageSanitizer::storeSanitized($data['profile_photo'], 'cards/photos', 'public');
             }
 
+            if (isset($data['banner']) && $data['banner'] instanceof UploadedFile) {
+                $data['banner'] = ImageSanitizer::storeSanitized($data['banner'], 'cards/banners', 'public');
+            }
+
             // First card becomes the user's default.
             $isFirst = $user->cards()->count() === 0;
             $data['is_default'] = $isFirst;
@@ -66,6 +70,13 @@ class CardService
             }
             // Strip EXIF/GPS metadata before persisting (data minimisation).
             $data['profile_photo'] = ImageSanitizer::storeSanitized($data['profile_photo'], 'cards/photos', 'public');
+        }
+
+        if (isset($data['banner']) && $data['banner'] instanceof UploadedFile) {
+            if ($card->banner) {
+                Storage::disk('public')->delete($card->banner);
+            }
+            $data['banner'] = ImageSanitizer::storeSanitized($data['banner'], 'cards/banners', 'public');
         }
 
         return $this->cards->update($card, $data);

@@ -26,6 +26,7 @@ class StoreCardRequest extends FormRequest
             'about' => ['nullable', 'string', 'max:2000'],
             'card_template_id' => ['nullable', 'integer', 'exists:card_templates,id'],
             'profile_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'banner' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'theme' => ['nullable', 'array'],
             'is_published' => ['boolean'],
         ];

@@ -55,6 +55,7 @@ export interface Card {
   slug: string;
   full_name: string;
   profile_photo?: string | null;
+  banner?: string | null;
   designation?: string | null;
   company?: string | null;
   phone?: string | null;

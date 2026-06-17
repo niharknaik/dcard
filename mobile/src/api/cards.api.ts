@@ -1,6 +1,12 @@
 import {api} from './client';
 import {ApiEnvelope, Card, Service, SocialLink} from '@/types';
 
+export interface UploadAsset {
+  uri: string;
+  fileName?: string | null;
+  type?: string | null;
+}
+
 export interface CardInput {
   full_name: string;
   designation?: string;
@@ -65,5 +71,23 @@ export const cardsApi = {
 
   async removeService(serviceId: number): Promise<void> {
     await api.delete(`/services/${serviceId}`);
+  },
+
+  // Upload profile photo and/or banner as multipart. POST + _method=PUT because
+  // PHP can't parse multipart bodies on a real PUT request.
+  async uploadImages(cardId: number, files: {profile_photo?: UploadAsset; banner?: UploadAsset}): Promise<Card> {
+    const fd = new FormData();
+    fd.append('_method', 'PUT');
+    const append = (field: string, a?: UploadAsset) => {
+      if (a?.uri) {
+        fd.append(field, {uri: a.uri, name: a.fileName ?? `${field}.jpg`, type: a.type ?? 'image/jpeg'} as never);
+      }
+    };
+    append('profile_photo', files.profile_photo);
+    append('banner', files.banner);
+    const {data} = await api.post<ApiEnvelope<Card>>(`/cards/${cardId}`, fd, {
+      headers: {'Content-Type': 'multipart/form-data'},
+    });
+    return data.data;
   },
 };

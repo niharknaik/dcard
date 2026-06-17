@@ -14,7 +14,7 @@ class Card extends Model
 
     protected $fillable = [
         'user_id', 'team_id', 'card_template_id', 'template_id', 'slug',
-        'full_name', 'profile_photo', 'designation', 'company',
+        'full_name', 'profile_photo', 'banner', 'designation', 'company',
         'phone', 'whatsapp', 'email', 'website', 'address', 'about',
         'theme', 'is_published', 'is_default', 'views_count',
     ];

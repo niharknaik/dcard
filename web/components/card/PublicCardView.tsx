@@ -63,6 +63,13 @@ export function PublicCardView({card, qr}: {card: PublicCard; qr?: string | null
                   }
                 : undefined
             }>
+            {card.banner ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={card.banner} alt="" className="absolute inset-0 h-full w-full object-cover" aria-hidden />
+                <div className="absolute inset-0 bg-black/40" aria-hidden />
+              </>
+            ) : null}
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_80%_at_70%_0%,rgba(255,255,255,0.25),transparent)]"
               aria-hidden

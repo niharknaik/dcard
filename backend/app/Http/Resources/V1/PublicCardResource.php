@@ -18,6 +18,7 @@ class PublicCardResource extends JsonResource
             'slug' => $this->slug,
             'full_name' => $this->full_name,
             'profile_photo' => $this->profile_photo ? Storage::disk('public')->url($this->profile_photo) : null,
+            'banner' => $this->banner ? Storage::disk('public')->url($this->banner) : null,
             'designation' => $this->designation,
             'company' => $this->company,
             'phone' => $this->phone,
