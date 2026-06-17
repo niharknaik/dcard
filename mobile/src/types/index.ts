@@ -39,6 +39,17 @@ export interface SocialLink {
   is_active: boolean;
 }
 
+export interface Service {
+  id: number;
+  name: string;
+  description?: string | null;
+  price?: number | null;
+  currency?: string | null;
+  icon?: string | null;
+  sort_order: number;
+  is_active: boolean;
+}
+
 export interface Card {
   id: number;
   slug: string;
@@ -59,6 +70,7 @@ export interface Card {
   qr_url: string;
   social_links?: SocialLink[];
   social_links_count?: number;
+  services?: Service[];
   leads_count?: number;
 }
 

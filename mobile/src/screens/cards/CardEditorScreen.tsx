@@ -1,17 +1,20 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
-import {Button, Divider, IconButton, List, Snackbar, Text, TextInput} from 'react-native-paper';
+import {Button, Divider, IconButton, List, Menu, Snackbar, Text, TextInput} from 'react-native-paper';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ScreenContainer} from '@/components/ui/ScreenContainer';
 import {CardsStackParamList} from '@/navigation/types';
 import {CardInput, cardsApi} from '@/api/cards.api';
 import {apiErrorMessage} from '@/api/client';
-import {Card, SocialLink} from '@/types';
+import {Card, Service, SocialLink} from '@/types';
 import {colors, spacing} from '@/theme';
 
 type Props = NativeStackScreenProps<CardsStackParamList, 'CardEditor'>;
 
 const EMPTY: CardInput = {full_name: ''};
+
+// Must match the backend SocialPlatform enum (App\Enums\SocialPlatform).
+const PLATFORMS = ['whatsapp', 'instagram', 'facebook', 'linkedin', 'youtube', 'x', 'telegram', 'github'];
 
 export function CardEditorScreen({route, navigation}: Props) {
   const cardId = route.params?.cardId;
@@ -20,9 +23,21 @@ export function CardEditorScreen({route, navigation}: Props) {
   const [form, setForm] = useState<CardInput>(EMPTY);
   const [card, setCard] = useState<Card | null>(null);
   const [links, setLinks] = useState<SocialLink[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [snack, setSnack] = useState('');
+
+  // Add-social-link form state.
+  const [platform, setPlatform] = useState('');
+  const [linkUrl, setLinkUrl] = useState('');
+  const [platformMenu, setPlatformMenu] = useState(false);
+  const [addingLink, setAddingLink] = useState(false);
+
+  // Add-service form state.
+  const [serviceName, setServiceName] = useState('');
+  const [servicePrice, setServicePrice] = useState('');
+  const [addingService, setAddingService] = useState(false);
 
   const set = (key: keyof CardInput) => (value: string) => setForm(prev => ({...prev, [key]: value}));
 
@@ -46,6 +61,11 @@ export function CardEditorScreen({route, navigation}: Props) {
         address: data.address ?? '',
         about: data.about ?? '',
       });
+      try {
+        setServices(await cardsApi.listServices(cardId));
+      } catch {
+        setServices(data.services ?? []);
+      }
     } finally {
       setLoading(false);
     }
@@ -100,6 +120,47 @@ export function CardEditorScreen({route, navigation}: Props) {
       navigation.replace('CardEditor', {cardId: copy.id});
     } catch (e) {
       setSnack(apiErrorMessage(e));
+    }
+  };
+
+  const onAddLink = async () => {
+    if (!cardId || !platform || !linkUrl.trim()) {
+      setSnack('Pick a platform and enter a URL.');
+      return;
+    }
+    setAddingLink(true);
+    try {
+      const link = await cardsApi.addSocialLink(cardId, {platform, url: linkUrl.trim()});
+      setLinks(prev => [...prev, link]);
+      setPlatform('');
+      setLinkUrl('');
+    } catch (e) {
+      setSnack(apiErrorMessage(e));
+    } finally {
+      setAddingLink(false);
+    }
+  };
+
+  const onAddService = async () => {
+    if (!cardId || !serviceName.trim()) {
+      setSnack('Enter a service name.');
+      return;
+    }
+    setAddingService(true);
+    try {
+      const payload: {name: string; price?: number} = {name: serviceName.trim()};
+      const priceNum = parseFloat(servicePrice);
+      if (!Number.isNaN(priceNum)) {
+        payload.price = priceNum;
+      }
+      const svc = await cardsApi.addService(cardId, payload);
+      setServices(prev => [...prev, svc]);
+      setServiceName('');
+      setServicePrice('');
+    } catch (e) {
+      setSnack(apiErrorMessage(e));
+    } finally {
+      setAddingService(false);
     }
   };
 
@@ -158,6 +219,67 @@ export function CardEditorScreen({route, navigation}: Props) {
               )}
             />
           ))}
+          <View style={styles.addRow}>
+            <Menu
+              visible={platformMenu}
+              onDismiss={() => setPlatformMenu(false)}
+              anchor={
+                <Button mode="outlined" onPress={() => setPlatformMenu(true)} style={styles.platformBtn}>
+                  {platform || 'Platform'}
+                </Button>
+              }>
+              {PLATFORMS.map(p => (
+                <Menu.Item
+                  key={p}
+                  title={p}
+                  onPress={() => {
+                    setPlatform(p);
+                    setPlatformMenu(false);
+                  }}
+                />
+              ))}
+            </Menu>
+            <TextInput
+              label="URL"
+              value={linkUrl}
+              onChangeText={setLinkUrl}
+              autoCapitalize="none"
+              keyboardType="url"
+              mode="outlined"
+              style={styles.flex}
+            />
+          </View>
+          <Button mode="contained-tonal" icon="plus" onPress={onAddLink} loading={addingLink} disabled={addingLink} style={styles.addBtn}>
+            Add social link
+          </Button>
+
+          <Divider style={styles.divider} />
+          <Text variant="titleMedium">Services</Text>
+          {services.length === 0 ? <Text style={styles.muted}>No services added.</Text> : null}
+          {services.map(svc => (
+            <List.Item
+              key={svc.id}
+              title={svc.name}
+              description={svc.price != null ? `₹${svc.price}` : undefined}
+              left={props => <List.Icon {...props} icon="briefcase-outline" />}
+              right={() => (
+                <IconButton
+                  icon="delete"
+                  onPress={async () => {
+                    await cardsApi.removeService(svc.id);
+                    setServices(prev => prev.filter(s => s.id !== svc.id));
+                  }}
+                />
+              )}
+            />
+          ))}
+          <View style={styles.addRow}>
+            <TextInput label="Service name" value={serviceName} onChangeText={setServiceName} mode="outlined" style={styles.flex} />
+            <TextInput label="Price" value={servicePrice} onChangeText={setServicePrice} keyboardType="numeric" mode="outlined" style={styles.priceInput} />
+          </View>
+          <Button mode="contained-tonal" icon="plus" onPress={onAddService} loading={addingService} disabled={addingService} style={styles.addBtn}>
+            Add service
+          </Button>
 
           <Button mode="text" textColor={colors.error} icon="trash-can" onPress={onDelete} style={styles.delete}>
             Delete card
@@ -179,4 +301,9 @@ const styles = StyleSheet.create({
   divider: {marginVertical: spacing.md},
   muted: {color: colors.muted, marginVertical: spacing.sm},
   delete: {marginTop: spacing.lg},
+  addRow: {flexDirection: 'row', gap: spacing.sm, alignItems: 'center', marginTop: spacing.sm},
+  flex: {flex: 1},
+  platformBtn: {justifyContent: 'center'},
+  priceInput: {width: 110},
+  addBtn: {marginTop: spacing.sm, alignSelf: 'flex-start'},
 });

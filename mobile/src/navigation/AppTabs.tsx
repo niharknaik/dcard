@@ -44,6 +44,8 @@ export function AppTabs() {
       )}
       screenOptions={({route}) => ({
         headerShown: false,
+        // Remove the default hairline/shadow line above the tab bar.
+        tabBarStyle: {borderTopWidth: 0, elevation: 0},
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
         tabBarIcon: ({color, size}) => <Icon name={ICONS[route.name]} color={color} size={size} />,

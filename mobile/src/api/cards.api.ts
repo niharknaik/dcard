@@ -1,5 +1,5 @@
 import {api} from './client';
-import {ApiEnvelope, Card, SocialLink} from '@/types';
+import {ApiEnvelope, Card, Service, SocialLink} from '@/types';
 
 export interface CardInput {
   full_name: string;
@@ -51,5 +51,19 @@ export const cardsApi = {
 
   async removeSocialLink(linkId: number): Promise<void> {
     await api.delete(`/social-links/${linkId}`);
+  },
+
+  async listServices(cardId: number): Promise<Service[]> {
+    const {data} = await api.get<ApiEnvelope<Service[]>>(`/cards/${cardId}/services`);
+    return data.data;
+  },
+
+  async addService(cardId: number, payload: {name: string; description?: string; price?: number}): Promise<Service> {
+    const {data} = await api.post<ApiEnvelope<Service>>(`/cards/${cardId}/services`, payload);
+    return data.data;
+  },
+
+  async removeService(serviceId: number): Promise<void> {
+    await api.delete(`/services/${serviceId}`);
   },
 };

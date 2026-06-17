@@ -33,7 +33,7 @@ class Card extends Model
 
     public function getPublicUrlAttribute(): string
     {
-        return rtrim(config('app.card_public_base_url', config('app.url')), '/').'/card/'.$this->slug;
+        return rtrim(config('app.card_public_base_url', config('app.url')), '/').'/c/'.$this->slug;
     }
 
     // ---------------- Relationships ----------------

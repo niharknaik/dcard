@@ -75,6 +75,13 @@ export const spacing = {
   xxl: 48,
 };
 
+/**
+ * Vertical room to leave at the bottom of scrollable/list screens so their last
+ * content (and floating action buttons) clear the bottom tab bar instead of
+ * disappearing behind it. Combined with the device's bottom safe-area inset.
+ */
+export const tabBarClearance = 72;
+
 /** Corner radii — generous, soft rounding reads as modern/friendly. */
 export const radius = {
   sm: 8,
@@ -84,41 +91,57 @@ export const radius = {
   pill: 999,
 };
 
-/** Subtle, consistent elevation presets (iOS shadow + Android elevation). */
+/**
+ * Soft, layered elevation presets (iOS shadow + Android elevation). Low opacity
+ * + wide blur reads as premium/material rather than a hard drop shadow.
+ */
 export const elevation = {
   none: {},
   sm: {
     shadowColor: palette.slate900,
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    shadowOffset: {width: 0, height: 3},
     elevation: 2,
   },
   md: {
     shadowColor: palette.slate900,
     shadowOpacity: 0.08,
-    shadowRadius: 12,
-    shadowOffset: {width: 0, height: 4},
-    elevation: 4,
+    shadowRadius: 18,
+    shadowOffset: {width: 0, height: 8},
+    elevation: 5,
+  },
+  lg: {
+    shadowColor: palette.indigo900,
+    shadowOpacity: 0.18,
+    shadowRadius: 24,
+    shadowOffset: {width: 0, height: 12},
+    elevation: 10,
   },
 };
 
-// Bolder, tighter headings; comfortable body line-heights. Applied via MD3 so
-// every Paper <Text variant> picks them up app-wide.
+// Confident, tightly-tracked headings; comfortable body text. Applied via MD3 so
+// every Paper <Text variant> picks them up app-wide. Sizes stay at MD3 defaults
+// (only weight/tracking tuned) to keep layouts predictable.
 const fontConfig = {
+  displayLarge: {fontWeight: '800' as const, letterSpacing: -1},
+  displayMedium: {fontWeight: '800' as const, letterSpacing: -0.5},
+  displaySmall: {fontWeight: '700' as const, letterSpacing: -0.5},
+  headlineLarge: {fontWeight: '700' as const, letterSpacing: -0.5},
   headlineMedium: {fontWeight: '700' as const, letterSpacing: -0.4},
   headlineSmall: {fontWeight: '700' as const, letterSpacing: -0.3},
   titleLarge: {fontWeight: '700' as const, letterSpacing: -0.2},
-  titleMedium: {fontWeight: '600' as const},
+  titleMedium: {fontWeight: '600' as const, letterSpacing: -0.1},
   titleSmall: {fontWeight: '600' as const},
-  labelLarge: {fontWeight: '600' as const},
+  labelLarge: {fontWeight: '600' as const, letterSpacing: 0.1},
+  labelMedium: {fontWeight: '600' as const},
 };
 
 const fonts = configureFonts({config: fontConfig});
 
 export const theme: MD3Theme = {
   ...MD3LightTheme,
-  roundness: radius.md,
+  roundness: 4,
   colors: {
     ...MD3LightTheme.colors,
     primary: colors.primary,
@@ -151,7 +174,7 @@ export const darkColors = {
 
 export const darkTheme: MD3Theme = {
   ...MD3DarkTheme,
-  roundness: radius.md,
+  roundness: 4,
   colors: {
     ...MD3DarkTheme.colors,
     primary: darkColors.primary,
